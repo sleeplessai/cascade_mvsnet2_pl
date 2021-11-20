@@ -32,6 +32,8 @@ def get_opts():
                         help='number of training epochs')
     parser.add_argument('--num_gpus', type=int, default=1,
                         help='number of gpus')
+    parser.add_argument('--sync_bn', default=False, action='store_true',
+                        help='enable sync batchnorm')
 
     parser.add_argument('--ckpt_path', type=str, default='',
                         help='pretrained checkpoint path to load')

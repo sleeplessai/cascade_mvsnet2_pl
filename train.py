@@ -36,7 +36,7 @@ class MVSSystem(LightningModule):
                                         std=[1/0.229, 1/0.224, 1/0.225])
 
         self.loss = loss_dict[hparams.loss_type](hparams.levels)
-
+        self.prepare_data()
         self.model = CascadeMVSNet(n_depths=self.hparams.n_depths,
                                    interval_ratios=self.hparams.interval_ratios,
                                    num_groups=self.hparams.num_groups,
@@ -203,8 +203,9 @@ if __name__ == '__main__':
                       weights_summary=None,
                       progress_bar_refresh_rate=1,
                       gpus=hparams.num_gpus,
-                      distributed_backend='ddp' if hparams.num_gpus>1 else None,
-                      num_sanity_val_steps=0 if hparams.num_gpus>1 else 5,
+                      sync_batchnorm=hparams.sync_bn and hparams.num_gpus > 1,
+                      distributed_backend='ddp' if hparams.num_gpus > 1 else None,
+                      num_sanity_val_steps=0 if hparams.num_gpus > 1 else 5,
                       benchmark=True,
                       precision=16 if hparams.use_amp else 32,
                       amp_level='O1')
